@@ -1,0 +1,32 @@
+{
+    "manifest_version": 3,
+    "name": "TLDRize",
+    "version": "2.0.0",
+    "description": "Summarize articles using AI and save them to your library.",
+    "permissions": [
+        "scripting",
+        "activeTab",
+        "storage"
+    ],
+    "host_permissions": [
+        "<all_urls>",
+        "http://localhost:3000/*"
+    ],
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": "icon.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "background": {
+        "service_worker": "background.js"
+    }
+}
