@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useGemini } from './hooks/useGemini';
 import {
-  Cpu,
+
   FileText,
   List,
   BookOpen,
@@ -157,7 +157,7 @@ function App() {
       {/* Header */}
       <header className="bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2 text-blue-600">
-          <Cpu className="w-6 h-6" />
+          <img src="/icon.png" alt="Logo" className="w-8 h-8 object-contain" />
           <h1 className="font-bold text-lg">TLDRize</h1>
         </div>
         {/* Settings Button Removed
