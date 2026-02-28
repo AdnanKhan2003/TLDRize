@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
         const { url, title, summary, type, tags } = body;
 
-        // Basic validation
+
         if (!url || !title || !summary) {
             return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
         }

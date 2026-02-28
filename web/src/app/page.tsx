@@ -5,7 +5,7 @@ import SummaryCard from '@/components/SummaryCard';
 
 async function getSummaries() {
     await connectToDatabase();
-    // Lean query for performance, serialization workaround for plain objects
+
     const summaries = await Summary.find({}).sort({ createdAt: -1 }).lean();
 
     return summaries.map((s: any) => ({
@@ -30,7 +30,7 @@ export default async function Home() {
                     </div>
 
                     <div className="hidden sm:block">
-                        {/* Search/Filter will go here */}
+
                         <input
                             type="text"
                             placeholder="Search summaries..."

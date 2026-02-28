@@ -21,11 +21,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "TLDRize",
     description: "Summarize articles using AI and save them to your library.",
-    url: "https://tldrize.vercel.app", // Placeholder URL, update if you have a real one
+    url: "https://tldrize.vercel.app",
     siteName: "TLDRize",
     images: [
       {
-        url: "/icon.png", // Must be an absolute URL in production, but relative works if metadataBase is set
+        url: "/icon.png",
         width: 800,
         height: 600,
       },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "TLDRize",
     description: "Summarize articles using AI and save them to your library.",
-    images: ["/icon.png"], // Must be an absolute URL in production
+    images: ["/icon.png"],
   },
 };
 

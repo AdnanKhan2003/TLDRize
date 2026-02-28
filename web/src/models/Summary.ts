@@ -18,7 +18,7 @@ const SummarySchema: Schema = new Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-// Prevent Mongoose OverwriteModelError
+
 const Summary: Model<ISummary> = mongoose.models.Summary || mongoose.model<ISummary>('Summary', SummarySchema);
 
 export default Summary;

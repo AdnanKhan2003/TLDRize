@@ -28,7 +28,7 @@ function App() {
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Advanced Features State
+
   const [savedTime, setSavedTime] = useState(0);
   const [pageTitle, setPageTitle] = useState('');
   const [pageUrl, setPageUrl] = useState('');
@@ -46,7 +46,7 @@ function App() {
   } = useGemini();
 
   useEffect(() => {
-    // Get article text & metadata on load
+
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
         if (tab?.id) {
@@ -61,7 +61,7 @@ function App() {
         }
       });
 
-      // Load total saved time
+
       chrome.storage.local.get(['totalSavedTime'], (result: { totalSavedTime?: number }) => {
         setSavedTime(result.totalSavedTime || 0);
       });
@@ -70,14 +70,14 @@ function App() {
 
   const calculateReadingTime = (text: string) => {
     const words = text.trim().split(/\s+/).length;
-    return Math.ceil(words / 200); // 200 wpm
+    return Math.ceil(words / 200);
   };
 
   const handleSummarize = async () => {
     if (articleText) {
       await generateSummary(articleText, mode);
 
-      // Update reading time saved
+
       const time = calculateReadingTime(articleText);
       const newTotal = savedTime + time;
       setSavedTime(newTotal);
@@ -91,7 +91,7 @@ function App() {
     if (articleText) {
       const sentences = await generateHighlights(articleText);
       if (sentences.length > 0) {
-        // Send to content script
+
         chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
           if (tab?.id) {
             chrome.tabs.sendMessage(tab.id, { type: 'HIGHLIGHT_TEXT', sentences });
@@ -117,10 +117,10 @@ function App() {
     if (!summary) return;
 
     try {
-      // 1. Generate tags if missing
+
       const currentTags = tags.length > 0 ? tags : await generateTags(articleText || '');
 
-      // 2. Post to Web App
+
       const response = await fetch('http://localhost:3000/api/summaries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -145,29 +145,20 @@ function App() {
   };
 
 
-  /* 
-  // Removed Setup Screen for Hardcoded Key
-  if (!apiKey) {
-    return ( ... );
-  }
-  */
+
 
   return (
     <div className="w-[400px] min-h-[500px] bg-slate-50 flex flex-col font-sans">
-      {/* Header */}
+
       <header className="bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2 text-blue-600">
           <img src="/icon.png" alt="Logo" className="w-8 h-8 object-contain" />
           <h1 className="font-bold text-lg">TLDRize</h1>
         </div>
-        {/* Settings Button Removed
-        <button onClick={openOptions} className="text-slate-400 hover:text-slate-600">
-          <Settings className="w-5 h-5" />
-        </button>
-        */}
+
       </header>
 
-      {/* Tabs */}
+
       <div className="p-4 pb-0">
         <div className="bg-slate-200 p-1 rounded-xl flex">
           <button
@@ -194,7 +185,7 @@ function App() {
       <main className="flex-1 p-4 flex flex-col gap-4">
         {activeTab === 'summarize' && (
           <>
-            {/* Mode Selector */}
+
             <div className="grid grid-cols-2 gap-2">
               {[
                 { id: 'brief', label: 'Brief', icon: FileText },
@@ -217,7 +208,7 @@ function App() {
               ))}
             </div>
 
-            {/* Action Buttons Grid */}
+
             <div className="flex gap-2 mb-2">
               <button
                 onClick={handleSummarize}
@@ -245,21 +236,21 @@ function App() {
               </button>
             </div>
 
-            {/* Reading Time Saved */}
+
             {savedTime > 0 && (
               <div className="text-center text-xs text-green-600 font-medium bg-green-50 py-1.5 rounded-lg border border-green-100 mb-2">
                 🎉 You've saved approx. {savedTime} mins of reading time!
               </div>
             )}
 
-            {/* Error Message */}
+
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm border border-red-100">
                 {error}
               </div>
             )}
 
-            {/* Result Area */}
+
             {summary && (
               <div className="flex-1 bg-white border border-slate-200 rounded-xl p-4 shadow-sm animate-in fade-in slide-in-from-bottom-2">
                 <div className="prose prose-sm prose-slate max-w-none mb-3">
@@ -276,7 +267,7 @@ function App() {
                   )}
                 </div>
 
-                {/* Persistent Action Buttons */}
+
                 <div className="flex gap-2 justify-end pt-2 border-t border-slate-100">
                   <button
                     onClick={() => handleCopy(summary)}

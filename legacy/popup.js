@@ -4,7 +4,7 @@ document.getElementById("summarize").addEventListener("click", async () => {
 
   const summaryType = document.getElementById("summary-type").value;
 
-  // Get API key from storage
+
   chrome.storage.sync.get(["geminiApiKey"], async (result) => {
     if (!result.geminiApiKey) {
       resultDiv.innerHTML =
@@ -31,9 +31,8 @@ document.getElementById("summarize").addEventListener("click", async () => {
             );
             resultDiv.innerText = summary;
           } catch (error) {
-            resultDiv.innerText = `Error: ${
-              error.message || "Failed to generate summary."
-            }`;
+            resultDiv.innerText = `Error: ${error.message || "Failed to generate summary."
+              }`;
           }
         }
       );
@@ -63,7 +62,7 @@ document.getElementById("copy-btn").addEventListener("click", () => {
 });
 
 async function getGeminiSummary(text, summaryType, apiKey) {
-  // Truncate very long texts to avoid API limits (typically around 30K tokens)
+
   const maxLength = 20000;
   const truncatedText =
     text.length > maxLength ? text.substring(0, maxLength) + "..." : text;

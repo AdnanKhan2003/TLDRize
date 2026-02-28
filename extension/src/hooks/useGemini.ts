@@ -24,39 +24,15 @@ export function useGemini(): UseGeminiReturn {
     const [answer, setAnswer] = useState<string | null>(null);
     const [tags, setTags] = useState<string[]>([]);
 
-    // ---------------------------------------------------------
-    // 🔑 API KEY CONFIGURATION
-    // Loaded from .env file (VITE_GEMINI_API_KEY)
-    // ---------------------------------------------------------
+
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
 
     const setApiKeyState = (_key: string) => {
-        // No-op since we are using hardcoded key
+
         console.log('Using hardcoded key, ignoring setApiKey');
     };
 
-    /*
-    const [apiKey, setApiKeyState] = useState<string | null>(null);
-  
-    useEffect(() => {
-      // Load API key from storage
-      if (typeof chrome !== 'undefined' && chrome.storage) {
-        chrome.storage.sync.get(['geminiApiKey'], (result: { geminiApiKey?: string }) => {
-          if (result.geminiApiKey) {
-            setApiKeyState(result.geminiApiKey);
-          }
-        });
-      }
-    }, []);
-  
-    const setApiKey = (key: string) => {
-      if (typeof chrome !== 'undefined' && chrome.storage) {
-        chrome.storage.sync.set({ geminiApiKey: key }, () => {
-          setApiKeyState(key);
-        });
-      }
-    };
-    */
+
     const getGeminiResponse = async (prompt: string, key: string) => {
         const model = 'gemini-2.5-flash';
         try {
@@ -76,7 +52,7 @@ export function useGemini(): UseGeminiReturn {
                 const errorData = await res.json();
                 console.error("Gemini API Error:", errorData);
 
-                // If model not found, try to list models to console for debugging
+
                 if (res.status === 404 || res.status === 400) {
                     console.log("Attempting to list available models...");
                     const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
@@ -199,6 +175,6 @@ export function useGemini(): UseGeminiReturn {
         generateTags,
         generateHighlights,
         apiKey,
-        setApiKey: setApiKeyState, // Return the no-op function
+        setApiKey: setApiKeyState,
     };
 }
