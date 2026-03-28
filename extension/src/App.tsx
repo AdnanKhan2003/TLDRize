@@ -11,7 +11,8 @@ import {
   Copy,
   Check,
   Save,
-  MessageSquare
+  MessageSquare,
+  Library
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -107,6 +108,14 @@ function App() {
     }
   };
 
+  const handleOpenLibrary = () => {
+    if (typeof chrome !== 'undefined' && chrome.tabs) {
+      chrome.tabs.create({ url: 'http://localhost:3000' });
+    } else {
+      window.open('http://localhost:3000', '_blank');
+    }
+  };
+
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -156,6 +165,13 @@ function App() {
           <h1 className="font-bold text-lg">TLDRize</h1>
         </div>
 
+        <button
+          onClick={handleOpenLibrary}
+          title="Open Library Dashboard"
+          className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"
+        >
+          <Library className="w-5 h-5" />
+        </button>
       </header>
 
 
