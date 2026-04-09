@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 
 type SummaryType = 'brief' | 'detailed' | 'bullets' | 'eli5';
@@ -24,17 +23,13 @@ export function useGemini(): UseGeminiReturn {
     const [answer, setAnswer] = useState<string | null>(null);
     const [tags, setTags] = useState<string[]>([]);
 
-
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
 
     const setApiKeyState = (_key: string) => {
-
-        console.log('Using hardcoded key, ignoring setApiKey');
     };
 
-
     const getGeminiResponse = async (prompt: string, key: string) => {
-        const model = 'gemini-2.5-flash';
+        const model = 'gemini-1.5-flash';
         try {
             const res = await fetch(
                 `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
@@ -50,23 +45,12 @@ export function useGemini(): UseGeminiReturn {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                console.error("Gemini API Error:", errorData);
-
-
-                if (res.status === 404 || res.status === 400) {
-                    console.log("Attempting to list available models...");
-                    const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-                    const listData = await listRes.json();
-                    console.log("AVAILABLE MODELS:", listData);
-                }
-
                 throw new Error(errorData.error?.message || 'API request failed');
             }
 
             const data = await res.json();
             return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response available.';
         } catch (e) {
-            console.error("Gemini Request Failed", e);
             throw e;
         }
     };
@@ -144,7 +128,6 @@ export function useGemini(): UseGeminiReturn {
             setTags(newTags);
             return newTags;
         } catch (err) {
-            console.error('Tag generation failed', err);
             return [];
         }
     };
@@ -159,7 +142,6 @@ export function useGemini(): UseGeminiReturn {
             const result = await getGeminiResponse(prompt, apiKey);
             return result.split('|').map((s: string) => s.trim()).filter((s: string) => s.length > 10);
         } catch (err) {
-            console.error('Highlight generation failed', err);
             return [];
         }
     };

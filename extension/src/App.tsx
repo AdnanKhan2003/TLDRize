@@ -1,8 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useGemini } from './hooks/useGemini';
 import {
-
   FileText,
   List,
   BookOpen,
@@ -28,8 +26,6 @@ function App() {
   const [articleText, setArticleText] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
-
-
   const [savedTime, setSavedTime] = useState(0);
   const [pageTitle, setPageTitle] = useState('');
   const [pageUrl, setPageUrl] = useState('');
@@ -47,13 +43,11 @@ function App() {
   } = useGemini();
 
   useEffect(() => {
-
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
         if (tab?.id) {
           setPageTitle(tab.title || 'Untitled Article');
           setPageUrl(tab.url || '');
-
           chrome.tabs.sendMessage(tab.id, { type: 'GET_ARTICLE_TEXT' }, (response) => {
             if (response && response.text) {
               setArticleText(response.text);
@@ -61,8 +55,6 @@ function App() {
           });
         }
       });
-
-
       chrome.storage.local.get(['totalSavedTime'], (result: { totalSavedTime?: number }) => {
         setSavedTime(result.totalSavedTime || 0);
       });
@@ -77,8 +69,6 @@ function App() {
   const handleSummarize = async () => {
     if (articleText) {
       await generateSummary(articleText, mode);
-
-
       const time = calculateReadingTime(articleText);
       const newTotal = savedTime + time;
       setSavedTime(newTotal);
@@ -92,7 +82,6 @@ function App() {
     if (articleText) {
       const sentences = await generateHighlights(articleText);
       if (sentences.length > 0) {
-
         chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
           if (tab?.id) {
             chrome.tabs.sendMessage(tab.id, { type: 'HIGHLIGHT_TEXT', sentences });
@@ -124,12 +113,8 @@ function App() {
 
   const handleSave = async () => {
     if (!summary) return;
-
     try {
-
       const currentTags = tags.length > 0 ? tags : await generateTags(articleText || '');
-
-
       const response = await fetch('http://localhost:3000/api/summaries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -141,30 +126,22 @@ function App() {
           tags: currentTags
         })
       });
-
       if (response.ok) {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
-      } else {
-        console.error('Failed to save');
       }
     } catch (e) {
-      console.error('Save error', e);
+      console.error(e);
     }
   };
 
-
-
-
   return (
     <div className="w-[400px] min-h-[500px] bg-slate-50 flex flex-col font-sans">
-
       <header className="bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2 text-blue-600">
           <img src="/icon.png" alt="Logo" className="w-8 h-8 object-contain" />
           <h1 className="font-bold text-lg">TLDRize</h1>
         </div>
-
         <button
           onClick={handleOpenLibrary}
           title="Open Library Dashboard"
@@ -173,7 +150,6 @@ function App() {
           <Library className="w-5 h-5" />
         </button>
       </header>
-
 
       <div className="p-4 pb-0">
         <div className="bg-slate-200 p-1 rounded-xl flex">
@@ -201,7 +177,6 @@ function App() {
       <main className="flex-1 p-4 flex flex-col gap-4">
         {activeTab === 'summarize' && (
           <>
-
             <div className="grid grid-cols-2 gap-2">
               {[
                 { id: 'brief', label: 'Brief', icon: FileText },
@@ -223,7 +198,6 @@ function App() {
                 </button>
               ))}
             </div>
-
 
             <div className="flex gap-2 mb-2">
               <button
@@ -252,13 +226,11 @@ function App() {
               </button>
             </div>
 
-
             {savedTime > 0 && (
               <div className="text-center text-xs text-green-600 font-medium bg-green-50 py-1.5 rounded-lg border border-green-100 mb-2">
                 🎉 You've saved approx. {savedTime} mins of reading time!
               </div>
             )}
-
 
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm border border-red-100">
@@ -266,14 +238,12 @@ function App() {
               </div>
             )}
 
-
             {summary && (
               <div className="flex-1 bg-white border border-slate-200 rounded-xl p-4 shadow-sm animate-in fade-in slide-in-from-bottom-2">
                 <div className="prose prose-sm prose-slate max-w-none mb-3">
                   <p className="whitespace-pre-wrap text-slate-700 leading-relaxed text-sm">
                     {summary}
                   </p>
-
                   {tags.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-2 pt-2 border-t border-slate-100">
                       {tags.map(tag => (
@@ -282,7 +252,6 @@ function App() {
                     </div>
                   )}
                 </div>
-
 
                 <div className="flex gap-2 justify-end pt-2 border-t border-slate-100">
                   <button
